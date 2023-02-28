@@ -11,8 +11,8 @@ pub struct Usernames {
 impl Usernames {
     pub fn new(pb: ProgressBar) -> Self {
         Self {
-            pb,
             games: 0,
+            pb,
             usernames: FxHashSet::default()
         }
     }
@@ -22,7 +22,11 @@ impl Visitor for Usernames {
     type Result = ();
 
     fn begin_game(&mut self) {
-        self.pb.inc(1)
+        self.games += 1;
+        if self.games % 10_000 == 9999 {
+            self.pb.inc(10_000)
+        }
+
     }
 
     fn header(&mut self, key: &[u8], value: RawHeader<'_>) {
