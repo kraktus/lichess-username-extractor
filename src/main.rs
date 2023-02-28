@@ -1,4 +1,4 @@
-//! A simple unique username extractor in rust from the lichess db
+//! A simple player name/username extractor in rust from pgn files
 
 use std::{env, fs::File, io};
 
