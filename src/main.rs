@@ -1,17 +1,8 @@
 //! A simple unique username extractor in rust from the lichess db
 
-use std::{
-    collections::HashSet,
-    env,
-    fs::File,
-    io, mem,
-    sync::{
-        atomic::{AtomicBool, Ordering},
-        Arc,
-    },
-};
+use std::{env, fs::File, io};
 
-use pgn_reader::{BufferedReader, RawHeader, San, SanPlus, Skip, Visitor};
+use pgn_reader::BufferedReader;
 
 mod visitor;
 

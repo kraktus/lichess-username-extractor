@@ -1,6 +1,5 @@
-use pgn_reader::{BufferedReader, RawHeader, San, SanPlus, Skip, Visitor};
+use pgn_reader::{RawHeader, Skip, Visitor};
 use rustc_hash::FxHashSet;
-use shakmaty::{fen::Fen, CastlingMode, Chess, Position};
 
 #[derive(Default)]
 pub struct Usernames {
@@ -18,10 +17,10 @@ impl Visitor for Usernames {
                 value
                     .decode_utf8()
                     .unwrap_or_else(|e| {
-                        panic!("{}", format!(
-                            "Error {e} decoding username at game: {}",
-                            self.nb_game
-                        ))
+                        panic!(
+                            "{}",
+                            format!("Error {e} decoding username at game: {}", self.nb_game)
+                        )
                     })
                     .to_string(),
             );
