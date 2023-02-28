@@ -4,20 +4,21 @@ use std::{env, fs::File, io};
 
 use indicatif::{ProgressBar, ProgressStyle};
 use pgn_reader::BufferedReader;
+use rustc_hash::FxHashSet;
 
 mod visitor;
 
 pub fn get_progress_bar(nb_games: u64) -> ProgressBar {
-        let pb = ProgressBar::new(nb_games);
-        pb.set_style(
+    let pb = ProgressBar::new(nb_games);
+    pb.set_style(
             ProgressStyle::with_template(
                 "{msg} {spinner:.green} [{elapsed_precise}] [{wide_bar:.cyan/blue}] {pos}/{len} ({eta})",
             )
             .expect("Invalid indicatif template syntax")
             .progress_chars("#>-"),
         );
-        pb
-    }
+    pb
+}
 
 fn main() {
     let mut args = env::args();
@@ -43,10 +44,13 @@ fn main() {
     };
     let mut reader = BufferedReader::new(uncompressed);
 
-
     let mut visitor = visitor::Usernames::new(get_progress_bar(nb_games));
     reader.read_all(&mut visitor).expect("Valid pgn file");
-    let mut usernames_vec: Vec<String> = visitor.usernames.into_iter().collect();
+    let mut usernames_vec: Vec<(String, usize)> = visitor.usernames.into_iter().collect();
     usernames_vec.sort();
-    std::fs::write("usernames.txt", usernames_vec.join("\n")).expect("write failed");
+    let usernames_vec: Vec<String> = usernames_vec
+        .into_iter()
+        .map(|(u, g)| format!("{u},{g}"))
+        .collect();
+    std::fs::write("usernames-nb-games.csv", usernames_vec.join("\n")).expect("write failed");
 }
