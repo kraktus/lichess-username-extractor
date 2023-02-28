@@ -24,7 +24,7 @@ fn main() {
     let path = args.nth(1).expect("pgn path expected");
     let nb_games = args
         .next()
-        .and_then(|s| u64::from_str_radix(dbg!(&s), 10).ok())
+        .and_then(|s| u64::from_str_radix(&s, 10).ok())
         .expect("number of games of the pgn");
     let file = File::open(&path).expect("fopen");
 
